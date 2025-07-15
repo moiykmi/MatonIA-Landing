@@ -528,32 +528,52 @@ footer {
     50% { transform: translateY(-5px); }
 }
 
-/* Testimonials swipe for mobile */
-.testimonials-grid {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.testimonials-grid::-webkit-scrollbar {
-    display: none;
-}
-
+/* Mobile Responsive Design */
 @media (max-width: 768px) {
+    /* Testimonials swipe for mobile */
+    .testimonials {
+        padding: 30px 20px;
+        overflow: hidden;
+    }
+    
     .testimonials-grid {
-        display: flex;
-        gap: 20px;
+        display: flex !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        gap: 15px;
         padding-bottom: 10px;
+        margin: 20px -20px 0 -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .testimonials-grid::-webkit-scrollbar {
+        display: none;
     }
     
     .testimonial {
         min-width: 280px;
+        max-width: 300px;
         scroll-snap-align: start;
         flex-shrink: 0;
+        padding: 20px;
+        margin-bottom: 0;
     }
     
+    .testimonial-author {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .savings {
+        text-align: left;
+    }
+    
+    /* Other mobile optimizations */
     .whatsapp-float {
         bottom: 20px;
         right: 20px;
@@ -585,24 +605,6 @@ footer {
     
     .steps {
         grid-template-columns: 1fr;
-    }
-    
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .testimonial {
-        padding: 20px;
-    }
-    
-    .testimonial-author {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .savings {
-        text-align: left;
     }
     
     .stats-container {
