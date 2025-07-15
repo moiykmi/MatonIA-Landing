@@ -1,0 +1,15 @@
+{
+  "whatsapp": {
+    "phoneNumber": "56912345678",
+    "message": "¡Hola! Estoy interesado en que MatonIA negocie mis cuentas (telefonía, internet, seguros, streaming, etc.). Me gustaría saber más sobre el servicio y cómo pueden ayudarme a ahorrar dinero."
+  },
+  "analytics": {
+    "googleAnalyticsId": "GA_MEASUREMENT_ID",
+    "facebookPixelId": "FB_PIXEL_ID"
+  },
+  "site": {
+    "title": "MatonIA - Ahorra en tus cuentas",
+    "description": "Deja que un experto negocie tus cuentas por ti y ahorra dinero. Telefonía, internet, seguros y más. Servicio automático vía WhatsApp.",
+    "url": "https://tu-dominio.com"
+  }
+}

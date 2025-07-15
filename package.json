@@ -1,0 +1,30 @@
+{
+  "name": "matonia-landing",
+  "version": "1.0.0",
+  "description": "Landing page for MatonIA - AI phone bill negotiation service",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "dev": "http-server -p 8000 -o",
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "cleancss -o assets/css/styles.min.css assets/css/styles.css",
+    "minify-js": "uglifyjs assets/js/script.js -o assets/js/script.min.js",
+    "deploy": "npm run build && gh-pages -d .",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "landing-page",
+    "matonia",
+    "telecom",
+    "negotiation",
+    "ai"
+  ],
+  "author": "MatonIA Team",
+  "license": "MIT",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "uglify-js": "^3.17.4",
+    "http-server": "^14.1.1",
+    "gh-pages": "^5.0.0"
+  }
+}

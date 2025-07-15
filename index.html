@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatonIA - Ahorra en tus cuentas | Negociación Automática</title>
+    <meta name="description" content="Deja que un experto negocie tus cuentas por ti y ahorra dinero. Telefonía, internet, seguros y más. Servicio automático vía WhatsApp. Sin compromiso.">
+    <meta name="keywords" content="ahorro cuentas, negociación automática, reducir facturas, telefonía, internet, seguros, MatonIA, Chile">
+    <meta name="author" content="MatonIA">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://matonia.com">
+    <meta property="og:title" content="MatonIA - Ahorra en tus cuentas">
+    <meta property="og:description" content="Deja que un experto negocie tus cuentas por ti y ahorra dinero. Telefonía, internet, seguros y más. Nos comunicaremos por WhatsApp.">
+    <meta property="og:image" content="https://matonia.com/assets/images/og-image.jpg">
+    <meta property="og:locale" content="es_CL">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://matonia.com">
+    <meta name="twitter:title" content="MatonIA - Ahorra en tus cuentas">
+    <meta name="twitter:description" content="Deja que un experto negocie tus cuentas por ti y ahorra dinero. Telefonía, internet, seguros y más.">
+    <meta name="twitter:image" content="https://matonia.com/assets/images/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/css/styles.css" as="style">
+    <link rel="preload" href="assets/js/script.js" as="script">
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MatonIA</h1>
+        </header>
+        
+        <main>
+            <section class="stats-bar">
+                <div class="stats-container">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Clientes Satisfechos</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">$2.5M+</span>
+                        <span class="stat-label">Ahorrados Total</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9⭐</span>
+                        <span class="stat-label">Calificación</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">72h</span>
+                        <span class="stat-label">Tiempo Promedio</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="hero">
+                <div class="urgency-banner">
+                    <span class="urgency-icon">🔥</span>
+                    <span class="urgency-text">¡Solo quedan 12 cupos disponibles este mes!</span>
+                    <span class="urgency-timer" id="urgency-timer">Tiempo limitado</span>
+                </div>
+                
+                <h2>Deja que un experto negocie tus cuentas por ti y ahorra dinero.</h2>
+                <p class="subtitle">Nos comunicaremos por WhatsApp.</p>
+                
+                <div class="benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L13.09 8.26L19 8L14.5 12.74L16 19L12 16.5L8 19L9.5 12.74L5 8L10.91 8.26L12 2Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Ahorra Dinero</h3>
+                        <p>Negociamos telefonía, internet, seguros, streaming y más. Ahorros reales garantizados</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Comodidad Total</h3>
+                        <p>No pierdas tiempo en llamadas y trámites. Nosotros nos encargamos de todo</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Múltiples Servicios</h3>
+                        <p>Telefonía, internet, seguros, streaming, gym, banco y cualquier servicio mensual</p>
+                    </div>
+                </div>
+                
+                <div class="cta-section">
+                    <button class="cta-button" onclick="openWhatsApp()" aria-label="Contactar por WhatsApp para negociar cuentas">
+                        <span class="button-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-2.462-.96-4.779-2.705-6.526-1.745-1.746-4.065-2.707-6.526-2.707-5.452 0-9.887 4.434-9.889 9.887-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.092-.643zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" fill="white"/>
+                            </svg>
+                        </span>
+                        <span class="button-text">¡Quiero que negocien mis cuentas!</span>
+                        <div class="button-loader hidden">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    <p class="guarantee">Sin compromiso - Solo pagas si ahorramos dinero</p>
+                </div>
+            </section>
+            
+            <section class="testimonials">
+                <h3>Lo que dicen nuestros clientes</h3>
+                <div class="testimonials-grid">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"MatonIA me ahorró $35.000 al mes en mi plan de telefonía. ¡Increíble servicio!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>María González</h4>
+                                <span>Ejecutiva, Santiago</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$35.000/mes</span>
+                                <span class="service">Telefonía</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"Redujeron mi factura de internet en un 40%. No podía creerlo, pero funcionó."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Carlos Mendoza</h4>
+                                <span>Ingeniero, Valparaíso</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$28.000/mes</span>
+                                <span class="service">Internet</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"Negociaron mi seguro de auto y mi plan de gym. Ahorro $50.000 mensuales."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Andrea Silva</h4>
+                                <span>Profesora, Concepción</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$50.000/mes</span>
+                                <span class="service">Seguros + Gym</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"En 3 días tenía nuevas tarifas. El proceso fue súper fácil por WhatsApp."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Roberto Muñoz</h4>
+                                <span>Contador, La Serena</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$42.000/mes</span>
+                                <span class="service">Telefonía + Streaming</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"Llevaba años pagando de más. MatonIA resolvió todo en una semana."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Patricia Herrera</h4>
+                                <span>Enfermera, Antofagasta</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$38.000/mes</span>
+                                <span class="service">Internet + Seguros</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"No solo telefonía, también mi plan de Netflix y Spotify. Servicio completo."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>Diego Vargas</h4>
+                                <span>Estudiante, Temuco</span>
+                            </div>
+                            <div class="savings">
+                                <span class="amount">$25.000/mes</span>
+                                <span class="service">Streaming</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="how-it-works">
+                <h3>¿Cómo funciona?</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="step-number">1</span>
+                        <h4>Comparte tu información</h4>
+                        <p>Haz clic en el botón y compártenos información de tus cuentas por WhatsApp</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.5 15.5L4.5 10.5L3 12L9.5 18.5L21 7L19.5 5.5L9.5 15.5Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="step-number">2</span>
+                        <h4>Negociamos por ti</h4>
+                        <p>Nuestro agente MatonIA analiza tus cuentas y negocia con cada empresa</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L13.09 8.26L19 8L14.5 12.74L16 19L12 16.5L8 19L9.5 12.74L5 8L10.91 8.26L12 2Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="step-number">3</span>
+                        <h4>Disfruta el ahorro</h4>
+                        <p>Te informamos los ahorros conseguidos y disfrutas de tus nuevas tarifas</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 MatonIA. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+    
+    <!-- Floating WhatsApp Button -->
+    <div class="whatsapp-float" onclick="openWhatsApp()" aria-label="Contactar por WhatsApp">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-2.462-.96-4.779-2.705-6.526-1.745-1.746-4.065-2.707-6.526-2.707-5.452 0-9.887 4.434-9.889 9.887-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.092-.643zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" fill="white"/>
+        </svg>
+        <div class="whatsapp-tooltip">¡Contáctanos!</div>
+    </div>
+    
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
