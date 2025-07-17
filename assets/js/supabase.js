@@ -1,7 +1,7 @@
 // Supabase client configuration
 // Para Vercel, las variables se inyectan en tiempo de build
-const SUPABASE_URL = 'https://your-project.supabase.co'; // Reemplazar con tu URL
-const SUPABASE_ANON_KEY = 'your-anon-key'; // Reemplazar con tu clave
+const SUPABASE_URL = 'https://konmsfgdpvhylthiauyj.supabase.co'; // Reemplazar con tu URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtvbm1zZmdkcHZoeWx0aGlhdXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3NjQxOTUsImV4cCI6MjA2ODM0MDE5NX0.NqhcK3B6WXU9jyDAKmRaAgdDYV-6HRQbQETxKgf5vE4'; // Reemplazar con tu clave
 
 // Simple Supabase client (sin dependencias)
 class SupabaseClient {
