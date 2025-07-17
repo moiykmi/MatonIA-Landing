@@ -502,14 +502,24 @@ async function handleLeadSubmission(event) {
         // Submit to Supabase if available
         let leadId = null;
         if (window.supabase) {
+            console.log('Submitting lead data:', leadData);
             const result = await window.supabase.submitLead(leadData);
+            console.log('Supabase result:', result);
+            
             if (result && result.success) {
                 // Generate a temporary ID for tracking
                 leadId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 console.log('Lead submitted successfully:', leadId);
             } else if (result === null) {
+                console.error('Supabase returned null - database error');
                 throw new Error('Failed to submit lead to database');
+            } else {
+                console.error('Unexpected Supabase result:', result);
+                throw new Error('Unexpected database response');
             }
+        } else {
+            console.error('Supabase client not available');
+            throw new Error('Database connection not available');
         }
         
         // Calculate estimated savings
