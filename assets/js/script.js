@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCounters();
     initExitIntent();
     initLazyLoading();
+    initLeadForm();
     
     // Update urgency counter immediately and every hour
     updateUrgencyCounter();
@@ -463,4 +464,147 @@ async function showPhoneNumber() {
     
     const phoneNumber = `+${config.whatsapp.phoneNumber}`;
     alert(`Contáctanos por WhatsApp al: ${phoneNumber}`);
+}
+
+// Lead form functionality
+function initLeadForm() {
+    const leadForm = document.getElementById('leadCaptureForm');
+    if (!leadForm) return;
+    
+    leadForm.addEventListener('submit', handleLeadSubmission);
+}
+
+// Handle lead form submission
+async function handleLeadSubmission(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitBtn = form.querySelector('.lead-submit-btn');
+    const buttonText = submitBtn.querySelector('.button-text');
+    const buttonLoader = submitBtn.querySelector('.button-loader');
+    
+    try {
+        // Show loading state
+        submitBtn.disabled = true;
+        buttonText.style.opacity = '0';
+        buttonLoader.classList.remove('hidden');
+        
+        // Collect form data
+        const formData = new FormData(form);
+        const leadData = {
+            name: formData.get('name'),
+            phone: formData.get('phone'),
+            current_provider: formData.get('current_provider'),
+            monthly_bill: parseFloat(formData.get('monthly_bill')) || null,
+            services: formData.getAll('services')
+        };
+        
+        // Submit to Supabase if available
+        let leadId = null;
+        if (window.supabase) {
+            const result = await window.supabase.submitLead(leadData);
+            if (result && result.length > 0) {
+                leadId = result[0].id;
+            }
+        }
+        
+        // Calculate estimated savings
+        const estimatedSavings = calculateSavings(leadData.monthly_bill, leadData.services);
+        
+        // Show success state
+        showSuccessMessage(estimatedSavings);
+        
+        // Track form completion
+        trackFormCompletion(leadData);
+        
+        // Store lead ID for WhatsApp tracking
+        if (leadId) {
+            window.currentLeadId = leadId;
+        }
+        
+    } catch (error) {
+        console.error('Error submitting lead:', error);
+        alert('Hubo un error al enviar tus datos. Por favor intenta nuevamente.');
+        
+        // Reset button state
+        submitBtn.disabled = false;
+        buttonText.style.opacity = '1';
+        buttonLoader.classList.add('hidden');
+    }
+}
+
+// Calculate estimated savings based on bill and services
+function calculateSavings(monthlyBill, services) {
+    if (!monthlyBill || monthlyBill === 0) {
+        return 25000; // Default estimate
+    }
+    
+    let savingsPercentage = 0.25; // Base 25% savings
+    
+    // Increase savings based on number of services
+    if (services.length >= 3) {
+        savingsPercentage = 0.4; // 40% for multiple services
+    } else if (services.length >= 2) {
+        savingsPercentage = 0.35; // 35% for two services
+    } else if (services.length >= 1) {
+        savingsPercentage = 0.3; // 30% for one service
+    }
+    
+    return Math.floor(monthlyBill * savingsPercentage);
+}
+
+// Show success message and hide form
+function showSuccessMessage(estimatedSavings) {
+    const leadFormSection = document.getElementById('leadForm');
+    const ctaSection = document.getElementById('ctaSection');
+    const estimatedSavingsElement = document.getElementById('estimatedSavings');
+    
+    if (leadFormSection && ctaSection) {
+        leadFormSection.classList.add('hidden');
+        ctaSection.classList.remove('hidden');
+        
+        if (estimatedSavingsElement) {
+            estimatedSavingsElement.textContent = estimatedSavings.toLocaleString('es-CL');
+        }
+    }
+}
+
+// Enhanced WhatsApp function for leads
+async function openWhatsAppWithLead() {
+    const leadId = window.currentLeadId;
+    
+    // Track WhatsApp click in Supabase
+    if (window.supabase && leadId) {
+        await window.supabase.trackWhatsAppClick(leadId);
+    }
+    
+    // Use existing WhatsApp function
+    await openWhatsApp();
+}
+
+// Track form completion
+function trackFormCompletion(leadData) {
+    console.log('Lead form completed:', leadData);
+    
+    // Google Analytics
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'lead_generation', {
+            event_category: 'engagement',
+            event_label: 'lead_form_completion',
+            value: 1
+        });
+    }
+    
+    // Facebook Pixel
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+            content_name: 'Lead Form',
+            content_category: 'form_submission'
+        });
+    }
+    
+    // Supabase event tracking
+    if (window.supabase) {
+        window.supabase.trackEvent('lead_form_submit', 'leadCaptureForm', 'lead-form');
+    }
 }
