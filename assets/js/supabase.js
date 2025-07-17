@@ -1,6 +1,7 @@
 // Supabase client configuration
-const SUPABASE_URL = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
-const SUPABASE_ANON_KEY = typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
+// Para Vercel, las variables se inyectan en tiempo de build
+const SUPABASE_URL = 'https://your-project.supabase.co'; // Reemplazar con tu URL
+const SUPABASE_ANON_KEY = 'your-anon-key'; // Reemplazar con tu clave
 
 // Simple Supabase client (sin dependencias)
 class SupabaseClient {
