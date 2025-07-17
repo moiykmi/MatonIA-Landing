@@ -1,8 +1,8 @@
 
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "./build.sh",
   "outputDirectory": ".",
-  "installCommand": "npm install",
+  "installCommand": "echo 'No packages to install'",
   "rewrites": [
     {
       "source": "/(.*)",

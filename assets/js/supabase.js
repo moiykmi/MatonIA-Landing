@@ -1,7 +1,7 @@
 // Supabase client configuration
 // Obtener credenciales de configuración local o variables de entorno
-const SUPABASE_URL = window.SUPABASE_CONFIG?.url || 'https://konmsfgdpvhylthiauyj.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_CONFIG?.key || 'placeholder-key-regenerate-in-supabase';
+const SUPABASE_URL = window.SUPABASE_CONFIG?.url || window.ENV?.SUPABASE_URL || 'https://konmsfgdpvhylthiauyj.supabase.co';
+const SUPABASE_ANON_KEY = window.SUPABASE_CONFIG?.key || window.ENV?.SUPABASE_ANON_KEY || 'placeholder-key-regenerate-in-supabase';
 
 // Simple Supabase client (sin dependencias)
 class SupabaseClient {
