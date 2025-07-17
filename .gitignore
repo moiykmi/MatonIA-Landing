@@ -134,6 +134,7 @@ temp/
 
 # Configuration files with sensitive data
 config.json
+config-local.js
 
 # OS generated files
 .DS_Store

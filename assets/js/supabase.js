@@ -1,7 +1,7 @@
 // Supabase client configuration
-// Para Vercel, las variables se inyectan en tiempo de build
-const SUPABASE_URL = 'https://konmsfgdpvhylthiauyj.supabase.co'; // Reemplazar con tu URL
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtvbm1zZmdkcHZoeWx0aGlhdXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3NjQxOTUsImV4cCI6MjA2ODM0MDE5NX0.NqhcK3B6WXU9jyDAKmRaAgdDYV-6HRQbQETxKgf5vE4'; // Reemplazar con tu clave
+// Obtener credenciales de configuración local o variables de entorno
+const SUPABASE_URL = window.SUPABASE_CONFIG?.url || 'https://konmsfgdpvhylthiauyj.supabase.co';
+const SUPABASE_ANON_KEY = window.SUPABASE_CONFIG?.key || 'placeholder-key-regenerate-in-supabase';
 
 // Simple Supabase client (sin dependencias)
 class SupabaseClient {
@@ -32,7 +32,17 @@ class SupabaseClient {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return response.json();
+            // Si la respuesta está vacía (return=minimal), devolver success
+            const text = await response.text();
+            if (!text) {
+                return { success: true };
+            }
+            
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { success: true, raw: text };
+            }
         } catch (error) {
             console.error('Supabase request failed:', error);
             return null;

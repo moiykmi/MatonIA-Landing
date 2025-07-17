@@ -503,8 +503,12 @@ async function handleLeadSubmission(event) {
         let leadId = null;
         if (window.supabase) {
             const result = await window.supabase.submitLead(leadData);
-            if (result && result.length > 0) {
-                leadId = result[0].id;
+            if (result && result.success) {
+                // Generate a temporary ID for tracking
+                leadId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                console.log('Lead submitted successfully:', leadId);
+            } else if (result === null) {
+                throw new Error('Failed to submit lead to database');
             }
         }
         
