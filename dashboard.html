@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatonIA - Dashboard Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+        }
+        
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+        
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #059669;
+        }
+        
+        .metric-label {
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #64748b;
+        }
+        
+        .error {
+            color: #dc2626;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-green { background: #10b981; }
+        .status-yellow { background: #f59e0b; }
+        .status-red { background: #ef4444; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>📊 MatonIA Analytics Dashboard</h1>
+        <p>Métricas AARRR en tiempo real</p>
+    </header>
+
+    <div class="dashboard">
+        <!-- Métricas principales -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="visitantes-hoy">-</div>
+                <div class="metric-label">Visitantes Hoy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="leads-hoy">-</div>
+                <div class="metric-label">Leads Hoy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="conversion-rate">-</div>
+                <div class="metric-label">
+                    <span class="status-indicator" id="conversion-status"></span>
+                    Tasa de Conversión
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="revenue-validations">-</div>
+                <div class="metric-label">Validaciones de Precio</div>
+            </div>
+        </div>
+
+        <!-- Gráfico de conversión diaria -->
+        <div class="chart-container">
+            <h2 class="chart-title">📈 Conversión Diaria (Últimos 7 días)</h2>
+            <canvas id="conversionChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- Tabla de fuentes de tráfico -->
+        <div class="table-container">
+            <h2 class="chart-title" style="padding: 1.5rem 1.5rem 0;">🎯 Fuentes de Tráfico</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fuente</th>
+                        <th>Visitantes</th>
+                        <th>Leads</th>
+                        <th>Conversión</th>
+                        <th>Revenue Potential</th>
+                    </tr>
+                </thead>
+                <tbody id="traffic-sources-table">
+                    <tr><td colspan="5" class="loading">Cargando datos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = 'https://konmsfgdpvhylthiauyj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtvbm1zZmdkcHZoeWx0aGlhdXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3NjQxOTUsImV4cCI6MjA2ODM0MDE5NX0.NqhcK3B6WXU9jyDAKmRaAgdDYV-6HRQbQETxKgf5vE4';
+
+        // Cliente simple para Supabase
+        class DashboardClient {
+            constructor(url, key) {
+                this.url = url;
+                this.key = key;
+            }
+
+            async query(sql) {
+                const response = await fetch(`${this.url}/rest/v1/rpc/execute_sql`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': this.key,
+                        'Authorization': `Bearer ${this.key}`
+                    },
+                    body: JSON.stringify({ query: sql })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                return response.json();
+            }
+
+            async getTable(tableName, select = '*', limit = 100) {
+                const response = await fetch(`${this.url}/rest/v1/${tableName}?select=${select}&limit=${limit}`, {
+                    headers: {
+                        'apikey': this.key,
+                        'Authorization': `Bearer ${this.key}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                return response.json();
+            }
+        }
+
+        const dashboard = new DashboardClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Función para actualizar métricas principales
+        async function updateMainMetrics() {
+            try {
+                // Visitantes hoy
+                const visitantesHoy = await dashboard.getTable('page_visits', 'session_id', 1000);
+                const visitantesUnicos = new Set(visitantesHoy
+                    .filter(v => new Date(v.created_at).toDateString() === new Date().toDateString())
+                    .map(v => v.session_id)
+                ).size;
+
+                document.getElementById('visitantes-hoy').textContent = visitantesUnicos;
+
+                // Leads hoy
+                const leadsHoy = await dashboard.getTable('leads', '*', 1000);
+                const leadsHoyCount = leadsHoy
+                    .filter(l => new Date(l.created_at).toDateString() === new Date().toDateString())
+                    .length;
+
+                document.getElementById('leads-hoy').textContent = leadsHoyCount;
+
+                // Tasa de conversión
+                const conversionRate = visitantesUnicos > 0 ? ((leadsHoyCount / visitantesUnicos) * 100).toFixed(1) : 0;
+                document.getElementById('conversion-rate').textContent = `${conversionRate}%`;
+
+                // Color del indicador de conversión
+                const indicator = document.getElementById('conversion-status');
+                if (conversionRate >= 10) {
+                    indicator.className = 'status-indicator status-green';
+                } else if (conversionRate >= 5) {
+                    indicator.className = 'status-indicator status-yellow';
+                } else {
+                    indicator.className = 'status-indicator status-red';
+                }
+
+                // Revenue validations
+                const revenueValidations = await dashboard.getTable('revenue_validation', '*', 1000);
+                document.getElementById('revenue-validations').textContent = revenueValidations.length;
+
+            } catch (error) {
+                console.error('Error updating metrics:', error);
+                document.querySelectorAll('.metric-value').forEach(el => {
+                    el.textContent = 'Error';
+                    el.style.color = '#dc2626';
+                });
+            }
+        }
+
+        // Función para crear gráfico de conversión
+        async function createConversionChart() {
+            try {
+                const pageVisits = await dashboard.getTable('page_visits', '*', 1000);
+                const leads = await dashboard.getTable('leads', '*', 1000);
+
+                // Agrupar por día (últimos 7 días)
+                const last7Days = Array.from({length: 7}, (_, i) => {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    return date.toDateString();
+                }).reverse();
+
+                const chartData = last7Days.map(dateStr => {
+                    const dayVisits = new Set(pageVisits
+                        .filter(v => new Date(v.created_at).toDateString() === dateStr)
+                        .map(v => v.session_id)
+                    ).size;
+
+                    const dayLeads = leads
+                        .filter(l => new Date(l.created_at).toDateString() === dateStr)
+                        .length;
+
+                    return {
+                        date: new Date(dateStr).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+                        visits: dayVisits,
+                        leads: dayLeads,
+                        conversion: dayVisits > 0 ? (dayLeads / dayVisits * 100).toFixed(1) : 0
+                    };
+                });
+
+                const ctx = document.getElementById('conversionChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.map(d => d.date),
+                        datasets: [
+                            {
+                                label: 'Visitantes',
+                                data: chartData.map(d => d.visits),
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Leads',
+                                data: chartData.map(d => d.leads),
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error creating chart:', error);
+                document.getElementById('conversionChart').parentElement.innerHTML = 
+                    '<div class="error">Error cargando gráfico</div>';
+            }
+        }
+
+        // Función para actualizar tabla de fuentes de tráfico
+        async function updateTrafficSources() {
+            try {
+                const pageVisits = await dashboard.getTable('page_visits', '*', 1000);
+                const leads = await dashboard.getTable('leads', '*', 1000);
+
+                // Agrupar por fuente
+                const sources = {};
+                
+                pageVisits.forEach(visit => {
+                    const source = visit.utm_source || 'Directo';
+                    if (!sources[source]) {
+                        sources[source] = { visits: new Set(), leads: 0, revenue: 0 };
+                    }
+                    sources[source].visits.add(visit.session_id);
+                });
+
+                leads.forEach(lead => {
+                    const visit = pageVisits.find(v => v.session_id === lead.session_id);
+                    const source = visit?.utm_source || 'Directo';
+                    if (sources[source]) {
+                        sources[source].leads++;
+                        sources[source].revenue += lead.monthly_bill || 0;
+                    }
+                });
+
+                const tableBody = document.getElementById('traffic-sources-table');
+                tableBody.innerHTML = Object.entries(sources)
+                    .sort((a, b) => b[1].leads - a[1].leads)
+                    .map(([source, data]) => {
+                        const visits = data.visits.size;
+                        const conversionRate = visits > 0 ? (data.leads / visits * 100).toFixed(1) : 0;
+                        
+                        return `
+                            <tr>
+                                <td>${source}</td>
+                                <td>${visits}</td>
+                                <td>${data.leads}</td>
+                                <td>${conversionRate}%</td>
+                                <td>$${data.revenue.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+
+            } catch (error) {
+                console.error('Error updating traffic sources:', error);
+                document.getElementById('traffic-sources-table').innerHTML = 
+                    '<tr><td colspan="5" class="error">Error cargando datos</td></tr>';
+            }
+        }
+
+        // Inicializar dashboard
+        async function initDashboard() {
+            await updateMainMetrics();
+            await createConversionChart();
+            await updateTrafficSources();
+        }
+
+        // Actualizar datos cada 5 minutos
+        initDashboard();
+        setInterval(initDashboard, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

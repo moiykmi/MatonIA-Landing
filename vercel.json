@@ -5,6 +5,10 @@
   "installCommand": "echo 'No packages to install'",
   "rewrites": [
     {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
