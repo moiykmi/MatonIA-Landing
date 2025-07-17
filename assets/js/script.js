@@ -578,8 +578,266 @@ async function openWhatsAppWithLead() {
         await window.supabase.trackWhatsAppClick(leadId);
     }
     
-    // Use existing WhatsApp function
+    // Mostrar validación de ingresos antes de abrir WhatsApp
+    showRevenueValidationPopup(leadId);
+}
+
+// Popup de validación de ingresos
+function showRevenueValidationPopup(leadId) {
+    const popup = document.createElement('div');
+    popup.innerHTML = `
+        <div class="revenue-popup-overlay">
+            <div class="revenue-popup">
+                <h3>🎯 Una última pregunta</h3>
+                <p>Para mejorar nuestro servicio, ¿cuánto estarías dispuesto a pagar por que negociemos tus cuentas?</p>
+                
+                <div class="pricing-options">
+                    <label class="pricing-option">
+                        <input type="radio" name="pricing_model" value="percentage">
+                        <span>Un porcentaje del ahorro conseguido</span>
+                        <div class="percentage-input" style="display: none;">
+                            <input type="number" id="percentage_willing" placeholder="%" min="5" max="50" value="20">
+                            <span>% del ahorro</span>
+                        </div>
+                    </label>
+                    
+                    <label class="pricing-option">
+                        <input type="radio" name="pricing_model" value="fixed_fee">
+                        <span>Una tarifa fija por servicio</span>
+                        <div class="fixed-input" style="display: none;">
+                            <input type="number" id="fixed_amount_willing" placeholder="$" min="5000" max="50000" value="15000">
+                            <span>pesos por servicio</span>
+                        </div>
+                    </label>
+                    
+                    <label class="pricing-option">
+                        <input type="radio" name="pricing_model" value="monthly_subscription">
+                        <span>Una suscripción mensual</span>
+                        <div class="monthly-input" style="display: none;">
+                            <input type="number" id="monthly_amount_willing" placeholder="$" min="2000" max="20000" value="5000">
+                            <span>pesos mensuales</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <div class="revenue-popup-buttons">
+                    <button class="revenue-continue-btn" onclick="submitRevenueValidation(${leadId})">
+                        Continuar a WhatsApp
+                    </button>
+                    <button class="revenue-skip-btn" onclick="skipRevenueValidation(${leadId})">
+                        Saltar pregunta
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    addRevenuePopupStyles();
+    document.body.appendChild(popup);
+    
+    // Manejar cambios en radio buttons
+    const radios = popup.querySelectorAll('input[name="pricing_model"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Ocultar todos los inputs
+            popup.querySelectorAll('.percentage-input, .fixed-input, .monthly-input').forEach(div => {
+                div.style.display = 'none';
+            });
+            
+            // Mostrar el input correspondiente
+            if (this.value === 'percentage') {
+                popup.querySelector('.percentage-input').style.display = 'flex';
+            } else if (this.value === 'fixed_fee') {
+                popup.querySelector('.fixed-input').style.display = 'flex';
+            } else if (this.value === 'monthly_subscription') {
+                popup.querySelector('.monthly-input').style.display = 'flex';
+            }
+        });
+    });
+    
+    // Seleccionar porcentaje por defecto
+    popup.querySelector('input[value="percentage"]').checked = true;
+    popup.querySelector('.percentage-input').style.display = 'flex';
+}
+
+// Enviar validación de ingresos
+async function submitRevenueValidation(leadId) {
+    const popup = document.querySelector('.revenue-popup-overlay');
+    const selectedModel = popup.querySelector('input[name="pricing_model"]:checked').value;
+    
+    const validationData = {
+        lead_id: leadId,
+        pricing_model: selectedModel,
+        estimated_savings: document.getElementById('estimatedSavings')?.textContent?.replace(/[^\d]/g, '') || 0
+    };
+    
+    // Capturar el valor según el modelo seleccionado
+    if (selectedModel === 'percentage') {
+        validationData.percentage_willing = parseFloat(popup.querySelector('#percentage_willing').value) || 20;
+    } else if (selectedModel === 'fixed_fee') {
+        validationData.fixed_amount_willing = parseFloat(popup.querySelector('#fixed_amount_willing').value) || 15000;
+    } else if (selectedModel === 'monthly_subscription') {
+        validationData.monthly_amount_willing = parseFloat(popup.querySelector('#monthly_amount_willing').value) || 5000;
+    }
+    
+    // Enviar a Supabase
+    if (window.supabase) {
+        await window.supabase.request('revenue_validation', 'POST', validationData);
+    }
+    
+    // Cerrar popup y continuar a WhatsApp
+    popup.remove();
     await openWhatsApp();
+}
+
+// Saltar validación de ingresos
+async function skipRevenueValidation(leadId) {
+    const popup = document.querySelector('.revenue-popup-overlay');
+    popup.remove();
+    await openWhatsApp();
+}
+
+// Estilos para el popup de validación
+function addRevenuePopupStyles() {
+    if (document.querySelector('#revenue-popup-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'revenue-popup-styles';
+    style.textContent = `
+        .revenue-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .revenue-popup {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            margin: 20px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .revenue-popup h3 {
+            font-family: 'Poppins', sans-serif;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .revenue-popup p {
+            color: #666;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .pricing-options {
+            margin-bottom: 25px;
+        }
+        
+        .pricing-option {
+            display: block;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .pricing-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .percentage-input,
+        .fixed-input,
+        .monthly-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .percentage-input input,
+        .fixed-input input,
+        .monthly-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .revenue-popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .revenue-continue-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .revenue-continue-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .revenue-skip-btn {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .revenue-skip-btn:hover {
+            background: #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .revenue-popup {
+                padding: 20px;
+            }
+            
+            .revenue-popup-buttons {
+                flex-direction: column;
+            }
+            
+            .revenue-continue-btn,
+            .revenue-skip-btn {
+                width: 100%;
+            }
+        }
+    `;
+    
+    document.head.appendChild(style);
 }
 
 // Track form completion
