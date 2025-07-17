@@ -587,9 +587,9 @@ function showSuccessMessage(estimatedSavings) {
 async function openWhatsAppWithLead() {
     const leadId = window.currentLeadId;
     
-    // Track WhatsApp click in Supabase
-    if (window.supabase && leadId) {
-        await window.supabase.trackWhatsAppClick(leadId);
+    // Track WhatsApp click as event (no PATCH needed with temp ID)
+    if (window.supabase) {
+        await window.supabase.trackEvent('whatsapp_click', 'cta-button', 'cta-section');
     }
     
     // Mostrar validación de ingresos antes de abrir WhatsApp
@@ -635,10 +635,10 @@ function showRevenueValidationPopup(leadId) {
                 </div>
                 
                 <div class="revenue-popup-buttons">
-                    <button class="revenue-continue-btn" onclick="submitRevenueValidation(${leadId})">
+                    <button class="revenue-continue-btn" onclick="submitRevenueValidation('${leadId}')">
                         Continuar a WhatsApp
                     </button>
-                    <button class="revenue-skip-btn" onclick="skipRevenueValidation(${leadId})">
+                    <button class="revenue-skip-btn" onclick="skipRevenueValidation('${leadId}')">
                         Saltar pregunta
                     </button>
                 </div>
